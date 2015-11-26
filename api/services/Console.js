@@ -6,8 +6,8 @@ var rgbs = [0, 1, 0]
 module.exports = function(clients){
   return {
     twitter: function(hashtag, id){
-        twitter.on('#Empire', function(text){
-          clients.send('2', '@'+text);
+        twitter.on(hashtag, function(text){
+          clients.send(id, '@'+text);
         });
      /*
       var count = 0;
@@ -17,7 +17,8 @@ module.exports = function(clients){
       */
     },
     led: function(id, init){
-        if(inter)
+        console.log('Foco on');
+        if(interLed)
           clearInterval(inter)
 
         interLed = setInterval(function(){
@@ -27,7 +28,7 @@ module.exports = function(clients){
 
     },
     rgb: function(id, r, g, b){
-      console.log(r, g, b);
+      console.log('RGB on');
       if(!interRgb)
       interRgb = setInterval(function(){
         var green = ['@greoff', '@greon'],

@@ -7,13 +7,7 @@ module.exports = {
   add: function(id, socket){
     clients_ids_socket[id] = socket;
   },
-  /*
-  setId: function(id, ip){
-    console.log('conocido', id, ip);
-    clients_ids_ips[id] = ip;
-    clients_ips_ids[ip] = id;
-  },
-  */
+
   send: function(id, text){
     socket = clients_ids_socket[id];
     if(socket){

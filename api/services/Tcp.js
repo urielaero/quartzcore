@@ -5,8 +5,6 @@ function streamPipe(){
   var set = false;
   var duplex_ = Duplex({ objectMode:true });
   duplex_._read = function(data){
-    //console.log('read');
-    //this.push(data);
   };
 
   duplex_._write = function(chunk, enc, cb){
@@ -33,18 +31,9 @@ var tcp_port = process.env.TCPPORT || 1338;
 
 net.createServer(function(socket){
   var dup = streamPipe();
-  socket.pipe(dup).pipe(socket);
-  //dup.pipe(socket);
-  /*
-  setInterval(function(){
-    console.log('run');
-    dup.write('asdasd');
-  }, 1000);
-  */
-  //pipe.write('asdas');
-  var ip = socket.remoteAddress;
-  //clients.add(ip, socket);
-  var id = false;
+  socket.pipe(dup).pipe(socket),
+  ip = socket.remoteAddress,
+  id = false;
   console.log('connect', ip);
   socket.on('data', function(data){
     var data = data.toString(),
@@ -53,7 +42,10 @@ net.createServer(function(socket){
     if(info.length && parseInt(info[0]) && !id){
       clients.add(info[0], dup);
       id = info[0];
-      if(info[0] == '3'){
+      if(info[0] == '2'){
+        var hashtag = info[1] && info[1].indexOf('#') != -1 && info[1] || '#lol';
+        cmd.twitter(hashtag.trim(), '2');
+      }else if(info[0] == '3'){
         cmd.led('3', info[1]);
       }else if(info[0] == '4'){
         cmd.rgb('4', info[1], info[2], info[3]);
@@ -70,11 +62,9 @@ net.createServer(function(socket){
     clients.removeId(id);
   });
 
-  //socket.write('yolo!');
 }).listen(tcp_port, '0.0.0.0');
-console.log('tcp_port', tcp_port);
+console.log('Server tcp on: ', tcp_port);
 
-//cmd.twitter('#Empire', "2");
 
 
 //for test

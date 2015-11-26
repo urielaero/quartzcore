@@ -5,29 +5,36 @@ var keys = {
   access_token_secret: process.env.TOKEN_SECRET
 };
 
-console.log('load keys', keys);
+if(!keys.consumer_key)
+  console.log('No load twitter keys');
+
 var Twitter = require('twitter'),
     twitter = new Twitter(keys);
 
 var streams = [];
+var previousHashtag;
 module.exports = {
   on: function(hastag, onNew){
+    if(previousHashtag != hastag){
+      previousHashtag = hastag;
+      this.destroy();
+    }
     twitter.stream('statuses/filter', {track: hastag}, function(stream) {
+      console.log('Twitter on: ', hastag);
       stream.on('data', function(tweet) {
         onNew(tweet.text);
       });
 
       stream.on('error', function(error) {
-        console.log('error');
+        console.log('error twitter api');
       });
       streams.push(stream);
-      console.log(stream.destroy);
     });
   },
   destroy: function(){
     streams.forEach(function(s){
-      console.log('destroy');
       s.destroy();
     });
+    streams.splice(0, streams.length);
   }
 }
