@@ -2,7 +2,6 @@ var Stream = require('stream');
 var Duplex = Stream.Duplex;
 
 function streamPipe(){
-  console.log('stream');
   var set = false;
   var duplex_ = Duplex({ objectMode:true });
   duplex_._read = function(data){
@@ -13,7 +12,7 @@ function streamPipe(){
   duplex_._write = function(chunk, enc, cb){
     var string =  chunk.toString();
     console.log('write', chunk.toString());
-    if(!set || string.indexOf('#Empire') != -1){
+    if(!set || string.indexOf('#Empire') != -1  || string.indexOf('@') != -1){
       set = true;
       this.push(chunk + '\r\n');
     }
@@ -28,6 +27,7 @@ function streamPipe(){
 var net = require('net'),
     twitter = require('./Twitter'),
     clients = require('./Clients'),
+    cmd = require('./Console')(clients),
     room = 'home';
 
 var tcp_port = process.env.TCPPORT || 1338;
@@ -54,7 +54,11 @@ net.createServer(function(socket){
     if(info.length && parseInt(info[0]) && !id){
       clients.add(info[0], dup);
       id = info[0];
+      if(info[0] == '3'){
+        cmd.led('3', info[1]);
+      }
     }
+
 
     console.log('content', info);
   });
@@ -69,6 +73,7 @@ net.createServer(function(socket){
 }).listen(tcp_port, '0.0.0.0');
 console.log('tcp_port', tcp_port);
 
+cmd.twitter('#Empire', "2");
 //for test
 //clients.add('192.168.0.1', { write: function(text){
 //  console.log('desde write', text);
@@ -82,13 +87,14 @@ twitter.on('#Empire', function(text){
   clients.send('2', text);
 });
 */
-
+/*
 var count = 0;
 setInterval(function(){
   console.log('setInterval');
   clients.send('2', '#Empire tww' + count++);
 }, 5000);
 
+*/
 /*
 setTimeout(function(){
   console.log('run');
@@ -99,3 +105,4 @@ setTimeout(function(){
 
 }, 9900);
 */
+
