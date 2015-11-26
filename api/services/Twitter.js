@@ -1,10 +1,13 @@
+var keys = {
+  consumer_key: process.env.CONSUMER_KEY,
+  consumer_secret: process.env.CONSUMER_SECRET,
+  access_token_key:  process.env.TOKEN_KEY,
+  access_token_secret: process.env.TOKEN_SECRET
+};
+
+console.log('load keys', keys);
 var Twitter = require('twitter'),
-    twitter = new Twitter({
-      consumer_key: process.env.CONSUMER_KEY,
-      consumer_secret: process.env.CONSUMER_SECRET,
-      access_token_key:  process.env.TOKEN_KEY,
-      access_token_secret: process.env.TOKEN_SECRET
-    });
+    twitter = new Twitter(keys);
 
 var streams = [];
 module.exports = {

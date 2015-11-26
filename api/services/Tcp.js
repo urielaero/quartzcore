@@ -3,7 +3,7 @@ var net = require('net'),
     clients = require('./Clients'),
     room = 'home';
 
-var tcp_port = process.env.TCPPORT || 1337;
+var tcp_port = process.env.TCPPORT || 1338;
 
 net.createServer(function(socket){
   var ip = socket.remoteAddress;
