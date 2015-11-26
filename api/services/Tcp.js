@@ -1,15 +1,9 @@
 var net = require('net'),
-    Twitter = require('twitter'),
+    twitter = require('./Twitter'),
     clients = require('./Clients'),
     room = 'home';
 
-var twitter = new Twitter({
-    consumer_key: process.env.CONSUMER_KEY,
-    consumer_secret: process.env.CONSUMER_SECRET,
-    access_token_key:  process.env.TOKEN_KEY,
-    access_token_secret: process.env.TOKEN_SECRET
-});
-
+var tcp_port = process.env.TCPPORT || 1337;
 
 net.createServer(function(socket){
   var ip = socket.remoteAddress;
@@ -26,12 +20,12 @@ net.createServer(function(socket){
   });
 
   socket.on('close', function(){
-    clients.removeByIp(ip);
+    clients.removeIp(ip);
   });
 
   //socket.write('yolo!');
 
-}).listen(1338, '0.0.0.0');
+}).listen(tcp_port, '0.0.0.0');
 
 //for test
 //clients.add('192.168.0.1', { write: function(text){
@@ -41,13 +35,18 @@ net.createServer(function(socket){
 //clients.setId('1', '192.168.0.1')
 //
 
-//removeIp('192.168.0.1');
-twitter.stream('statuses/filter', {track: '#IsisEnMexico'}, function(stream) {
-  stream.on('data', function(tweet) {
-    clients.send('2', tweet.text);
+/*
+twitter.on('#DeberíaSerAvengerPorque', function(text){
+  clients.send('2', text);
+});
+*/
+/*
+setTimeout(function(){
+  console.log('run');
+  twitter.destroy();
+  twitter.on('#NoPuedoDecirQueNo', function(text){
+    clients.send('2', text);
   });
 
-  stream.on('error', function(error) {
-    console.log(error);
-  });
-});
+}, 9900);
+*/
