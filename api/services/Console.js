@@ -4,13 +4,13 @@ module.exports = function(clients){
     twitter: function(hashtag, id){
       /*
         twitter.on('#Empire', function(text){
+          console.log('tweet');
           clients.send('2', text);
         });
     */
 
       var count = 0;
       setInterval(function(){
-        console.log('setInterval');
         clients.send(id, hashtag + 'tww' + count++);
       }, 5000);
     },
@@ -19,7 +19,7 @@ module.exports = function(clients){
           clearInterval(inter)
 
         inter = setInterval(function(){
-          console.log(init, !init);
+          //console.log(init, !init);
           clients.send(id, '@1');
         }, 5000);
 

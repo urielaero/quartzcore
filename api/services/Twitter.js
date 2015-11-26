@@ -14,13 +14,11 @@ module.exports = {
   on: function(hastag, onNew){
     twitter.stream('statuses/filter', {track: hastag}, function(stream) {
       stream.on('data', function(tweet) {
-        console.log('tweet');
         onNew(tweet.text);
       });
 
       stream.on('error', function(error) {
         console.log('error');
-        console.log(error);
       });
       streams.push(stream);
       console.log(stream.destroy);
