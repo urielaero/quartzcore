@@ -20,7 +20,7 @@ module.exports = function(clients){
     led: function(id, init){
         console.log('Foco on');
         if(interLed)
-          clearInterval(inter)
+          clearInterval(interLed)
 
         interLed = setInterval(function(){
           //console.log(init, !init);
