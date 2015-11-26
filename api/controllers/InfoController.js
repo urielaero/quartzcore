@@ -27,7 +27,10 @@ module.exports = {
     req.socket.on('disconnect',function(){
         req.socket.leave(room);
     });
-    res.ok();
+    res.json({
+      hashtag: global.initVars.hashtag,
+      rgb: global.initVars.rgb
+    });
   },
   twitter: function(req, res){
     var hashtag = req.param('hashtag');
@@ -46,7 +49,7 @@ module.exports = {
     var r = req.param('r'),
         g = req.param('g'),
         b = req.param('b');
-
+        console.log('res', r, g, b);
         Tcp.cmd.changeRgb('4', r, g, b);
     res.ok();
   }

@@ -42,7 +42,7 @@ net.createServer(function(socket){
     var data = data.toString(),
         info = data.split(',');
 
-    if(info.length && parseInt(info[0]) && !id){
+    if(info.length && parseInt(info[0])){// && !id){
       clients.add(info[0], dup);
       id = info[0];
       if(info[0] == '2'){
@@ -52,7 +52,7 @@ net.createServer(function(socket){
       }else if(info[0] == '3'){
         cmd.led('3', info[1]);
       }else if(info[0] == '4'){
-        cmd.setRgb('4', info[1], info[2], info[3]);
+        cmd.setRgb(parseInt(info[1] && info[1].trim()), parseInt(info[2] && info[2].trim()), parseInt(info[3] && info[3].trim()));
       }
     }
 

@@ -30,11 +30,13 @@ module.exports = function(clients){
     },
     setRgb: function(r, g, b){
       console.log('RGB on', r, g, b);
-      sails.io.sockets.in('home').emit('rgb', {
-        r: r == '1' ?'@redon':'@redoff',
-        g: g == '1' ?'@greon':'@greoff',
-        b: b == '1' ?'@bluon':'@bluoff'
-      });
+      global.initVars.rgb = {
+        r: r == 1 ?true:false,
+        g: g == 1 ?true:false,
+        b: b == 1 ?true:false
+      };
+
+      sails.io.sockets.in('home').emit('rgb', global.initVars.rgb);
       /*
       if(!interRgb)
       interRgb = setInterval(function(){
@@ -49,7 +51,10 @@ module.exports = function(clients){
       */
     },
     changeRgb: function(id, r, g, b){
-      clients.send('4', r, g, b);
+      clients.send('4', (r?'@redon':'@redoff') + (g?'@greon':'@greoff') + (b?'@bluon':'@bluoff'));
     }
   }
 };
+
+function check(ops, val){
+}
