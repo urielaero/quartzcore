@@ -9,6 +9,7 @@ net.createServer(function(socket){
   var ip = socket.remoteAddress;
   clients.add(ip, socket);
 
+  console.log('connect', ip);
   socket.on('data', function(data){
     var data = data.toString(),
         info = data.split(',');
@@ -26,6 +27,7 @@ net.createServer(function(socket){
   //socket.write('yolo!');
 
 }).listen(tcp_port, '0.0.0.0');
+console.log('tcp_port', tcp_port);
 
 //for test
 //clients.add('192.168.0.1', { write: function(text){
@@ -35,11 +37,10 @@ net.createServer(function(socket){
 //clients.setId('1', '192.168.0.1')
 //
 
-/*
 twitter.on('#DeberíaSerAvengerPorque', function(text){
   clients.send('2', text);
 });
-*/
+
 /*
 setTimeout(function(){
   console.log('run');
