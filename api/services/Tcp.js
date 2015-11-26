@@ -7,21 +7,24 @@ var tcp_port = process.env.TCPPORT || 1338;
 
 net.createServer(function(socket){
   var ip = socket.remoteAddress;
-  clients.add(ip, socket);
-
+  //clients.add(ip, socket);
+  var id = false;
   console.log('connect', ip);
   socket.on('data', function(data){
     var data = data.toString(),
         info = data.split(',');
 
-    if(info.length && parseInt(info[0]))
-      clients.setId(info[0], ip);
+    if(info.length && parseInt(info[0]) && !id){
+      clients.add(info[0], socket);
+      id = info[0];
+    }
 
     console.log('content', info);
   });
 
   socket.on('close', function(){
-    clients.removeIp(ip);
+    console.log('remove id', id);
+    clients.removeId(id);
   });
 
   //socket.write('yolo!');
@@ -37,7 +40,7 @@ console.log('tcp_port', tcp_port);
 //clients.setId('1', '192.168.0.1')
 //
 
-twitter.on('#DeberíaSerAvengerPorque', function(text){
+twitter.on('#Empire', function(text){
   clients.send('2', text);
 });
 
