@@ -15,7 +15,7 @@ function streamPipe(){
     console.log('write', chunk.toString());
     if(!set || string.indexOf('#Empire') != -1){
       set = true;
-      this.push(chunk + '\n');
+      this.push(chunk + '\r\n');
     }
     cb();
   };
