@@ -1,7 +1,4 @@
 var Stream = require('stream');
-var Writable = Stream.Writable;
-var Readable = Stream.Readable;
-var Transform = Stream.Transform;
 var Duplex = Stream.Duplex;
 
 function streamPipe(){
@@ -14,7 +11,7 @@ function streamPipe(){
 
   duplex_._write = function(chunk, enc, cb){
     console.log('write', chunk.toString());
-    this.push(chunk);
+    this.push(chunk + '\n');
     cb();
   };
 
@@ -34,35 +31,35 @@ net.createServer(function(socket){
   var dup = streamPipe();
   socket.pipe(dup).pipe(socket);
   //dup.pipe(socket);
+  /*
   setInterval(function(){
     console.log('run');
     dup.write('asdasd');
   }, 1000);
+  */
   //pipe.write('asdas');
-  /*
   var ip = socket.remoteAddress;
   //clients.add(ip, socket);
   var id = false;
   console.log('connect', ip);
-  socket.on('data', function(data){
+  dup.on('data', function(data){
     var data = data.toString(),
         info = data.split(',');
 
     if(info.length && parseInt(info[0]) && !id){
-      clients.add(info[0], socket);
+      clients.add(info[0], dup);
       id = info[0];
     }
 
     console.log('content', info);
   });
 
-  socket.on('close', function(){
+  dup.on('close', function(){
     console.log('remove id', id);
     clients.removeId(id);
   });
 
   //socket.write('yolo!');
-  */
 }).listen(tcp_port, '0.0.0.0');
 console.log('tcp_port', tcp_port);
 
@@ -74,10 +71,13 @@ console.log('tcp_port', tcp_port);
 //clients.setId('1', '192.168.0.1')
 //
 
-/****
 twitter.on('#Empire', function(text){
   clients.send('2', text);
 });
+/*
+setInterval(function(){
+  clients.send('2', 'twwweeet');
+}, 5000);
 */
 /*
 setTimeout(function(){
