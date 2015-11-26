@@ -33,9 +33,9 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    //view: 'homepage'
-    controller: 'Info',
-    action: 'change'
+    view: 'homepage'
+    //controller: 'Info',
+    //action: 'change'
   }
 
   /***************************************************************************

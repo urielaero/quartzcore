@@ -13,5 +13,24 @@ module.exports.bootstrap = function(cb) {
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  cb();
+  Watcher.init();
+
+  setInits(cb);
 };
+
+global.initVars = {};
+
+function setInits(done){
+  Hashtag.find().limit(1).sort('createdAt desc').exec(function(err, hastags){
+    if(err || !hastags.length){
+      Hashtag.create({'text': '#lol'}).exec(function(err, h){
+        done();
+        console.log('default');
+      });
+      global.initVars.hashtag = '#lol';
+    }else{
+      global.initVars.hashtag = hastags[0].text;
+      done();
+    }
+  });
+}

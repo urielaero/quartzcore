@@ -28,6 +28,27 @@ module.exports = {
         req.socket.leave(room);
     });
     res.ok();
+  },
+  twitter: function(req, res){
+    var hashtag = req.param('hashtag');
+    if(!hashtag)
+      return res.json({error: 'no hashtag'});
+
+    Hashtag.create({text: hashtag.trim()}).exec(function(err, h){
+      Tcp.cmd.twitter(h.text, '2');
+      res.ok();
+    });
+  },
+  hashtag: function(req, res){
+    res.json({text: global.initVars.hashtag});
+  },
+  rgb: function(req, res){
+    var r = req.param('r'),
+        g = req.param('g'),
+        b = req.param('b');
+
+        Tcp.cmd.changeRgb('4', r, g, b);
+    res.ok();
   }
 };
 

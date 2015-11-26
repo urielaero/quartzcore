@@ -6,6 +6,7 @@ var rgbs = [0, 1, 0]
 module.exports = function(clients){
   return {
     twitter: function(hashtag, id){
+        global.initVars.hashtag = hashtag;
         twitter.on(hashtag, function(text){
           clients.send(id, '@'+text);
         });
@@ -27,8 +28,14 @@ module.exports = function(clients){
         }, 5000);
 
     },
-    rgb: function(id, r, g, b){
-      console.log('RGB on');
+    setRgb: function(r, g, b){
+      console.log('RGB on', r, g, b);
+      sails.io.sockets.in('home').emit('rgb', {
+        r: r == '1' ?'@redon':'@redoff',
+        g: g == '1' ?'@greon':'@greoff',
+        b: b == '1' ?'@bluon':'@bluoff'
+      });
+      /*
       if(!interRgb)
       interRgb = setInterval(function(){
         var green = ['@greoff', '@greon'],
@@ -39,6 +46,10 @@ module.exports = function(clients){
         rgbs[1] = !rgbs[1];
         rgbs[2] = !rgbs[2];
       }, 5000);
+      */
+    },
+    changeRgb: function(id, r, g, b){
+      clients.send('4', r, g, b);
     }
   }
 };

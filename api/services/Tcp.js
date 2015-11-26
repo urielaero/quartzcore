@@ -29,6 +29,9 @@ var net = require('net'),
 
 var tcp_port = process.env.TCPPORT || 1338;
 
+module.exports.cmd = cmd;
+
+
 net.createServer(function(socket){
   var dup = streamPipe();
   socket.pipe(dup).pipe(socket),
@@ -43,12 +46,13 @@ net.createServer(function(socket){
       clients.add(info[0], dup);
       id = info[0];
       if(info[0] == '2'){
-        var hashtag = info[1] && info[1].indexOf('#') != -1 && info[1] || '#lol';
-        cmd.twitter(hashtag.trim(), '2');
+        var hashtag =  global.initVars.hashtag;
+        console.log('iniciando con:', hashtag);
+        cmd.twitter(hashtag, '2');
       }else if(info[0] == '3'){
         cmd.led('3', info[1]);
       }else if(info[0] == '4'){
-        cmd.rgb('4', info[1], info[2], info[3]);
+        cmd.setRgb('4', info[1], info[2], info[3]);
       }
     }
 
