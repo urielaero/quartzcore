@@ -3,6 +3,7 @@ var Duplex = Stream.Duplex;
 
 function streamPipe(){
   console.log('stream');
+  var set = false;
   var duplex_ = Duplex({ objectMode:true });
   duplex_._read = function(data){
     //console.log('read');
@@ -10,8 +11,12 @@ function streamPipe(){
   };
 
   duplex_._write = function(chunk, enc, cb){
+    var string =  chunk.toString();
     console.log('write', chunk.toString());
-    this.push(chunk + '\n');
+    if(!set || string.indexOf('#Empire') != -1){
+      set = true;
+      this.push(chunk + '\n');
+    }
     cb();
   };
 
@@ -42,7 +47,7 @@ net.createServer(function(socket){
   //clients.add(ip, socket);
   var id = false;
   console.log('connect', ip);
-  dup.on('data', function(data){
+  socket.on('data', function(data){
     var data = data.toString(),
         info = data.split(',');
 
@@ -54,7 +59,8 @@ net.createServer(function(socket){
     console.log('content', info);
   });
 
-  dup.on('close', function(){
+  socket.on('close', function(){
+    dup.end();
     console.log('remove id', id);
     clients.removeId(id);
   });
@@ -71,14 +77,18 @@ console.log('tcp_port', tcp_port);
 //clients.setId('1', '192.168.0.1')
 //
 
+/*
 twitter.on('#Empire', function(text){
   clients.send('2', text);
 });
-/*
-setInterval(function(){
-  clients.send('2', 'twwweeet');
-}, 5000);
 */
+
+var count = 0;
+setInterval(function(){
+  console.log('setInterval');
+  clients.send('2', '#Empire tww' + count++);
+}, 5000);
+
 /*
 setTimeout(function(){
   console.log('run');
