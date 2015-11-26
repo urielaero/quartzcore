@@ -25,7 +25,6 @@ function streamPipe(){
 }
 
 var net = require('net'),
-    twitter = require('./Twitter'),
     clients = require('./Clients'),
     cmd = require('./Console')(clients),
     room = 'home';
