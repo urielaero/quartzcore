@@ -29,7 +29,9 @@ module.exports = {
     });
     res.json({
       hashtag: global.initVars.hashtag,
-      rgb: global.initVars.rgb
+      rgb: global.initVars.rgb,
+      foco: global.initVars.foco,
+      stop: global.initVars.stop
     });
   },
   twitter: function(req, res){
@@ -51,6 +53,12 @@ module.exports = {
         b = req.param('b');
         console.log('res', r, g, b);
         Tcp.cmd.changeRgb('4', r, g, b);
+    res.ok();
+  },
+  foco: function(req, res){
+    var state = req.param('state');
+    console.log('sta', state);
+    Tcp.cmd.setLed(state);
     res.ok();
   }
 };

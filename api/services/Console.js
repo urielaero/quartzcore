@@ -18,6 +18,9 @@ module.exports = function(clients){
       */
     },
     led: function(id, init){
+        global.initVars.foco = init == '1'?true:false;
+        sails.io.sockets.in('home').emit('foco', global.initVars.foco);
+        /*
         console.log('Foco on');
         if(interLed)
           clearInterval(interLed)
@@ -26,7 +29,12 @@ module.exports = function(clients){
           //console.log(init, !init);
           clients.send(id, '@1');
         }, 5000);
-
+        */
+    },
+    setLed: function(val){
+      global.initVars.foco = val;
+      console.log('val', val)
+      clients.send('3', val?'@1':'@0');
     },
     setRgb: function(r, g, b){
       console.log('RGB on', r, g, b);
@@ -51,7 +59,16 @@ module.exports = function(clients){
       */
     },
     changeRgb: function(id, r, g, b){
+      global.initVars.rgb = {
+        r: r ,
+        g: g ,
+        b: b
+      };
       clients.send('4', (r?'@redon':'@redoff') + (g?'@greon':'@greoff') + (b?'@bluon':'@bluoff'));
+    },
+    stop: function(val){
+      global.initVars.stop = val;
+      sails.io.sockets.in('home').emit('stop', global.initVars.stop?true:false);
     }
   }
 };
